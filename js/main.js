@@ -412,7 +412,7 @@ function initContactForm() {
     });
     
     // Form submission
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const isNameValid = validateField(nameInput, patterns.name, 'name-error');
@@ -420,6 +420,26 @@ function initContactForm() {
         const isMessageValid = validateField(messageInput, patterns.message, 'message-error');
         
         if (isNameValid && isEmailValid && isMessageValid) {
+            const formData = new FormData(form);
+        
+        try {
+            // Formspree එකට data යවන ප්‍රධාන කොටස
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (response.ok) {
+                // සාර්ථක නම් success message එක පෙන්වා form එක reset කරනවා
+                successMessage.classList.add('show');
+                form.reset();
+            } else {
+                alert("පණිවිඩය යැවීමේ දෝෂයක්. නැවත උත්සාහ කරන්න.");
+            }
+        } catch (error) {
+            alert("අන්තර්ජාල සම්බන්ධතාවය පරීක්ෂා කර බලන්න.");
+        }
             // Show success message
             successMessage.classList.add('show');
             form.reset();
