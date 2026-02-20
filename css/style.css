@@ -601,8 +601,8 @@ img {
 
 .scroll-indicator {
     position: absolute;
-    bottom: 40px;
-    left: 50%;
+    bottom: 30px;
+    left: 45%;
     transform: translateX(-50%);
     text-align: center;
     opacity: 0;
