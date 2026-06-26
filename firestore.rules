@@ -1,0 +1,19 @@
+// Firestore Security Rules — paste in Firebase Console > Firestore > Rules
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.uid == 'SjQJd83a3Rhw2FdT1OraW5dYnZk2';
+    }
+
+    // Public read for portfolio data, admin-only writes.
+    match /projects/{doc}    { allow read: if true; allow write: if isAdmin(); }
+    match /categories/{doc}  { allow read: if true; allow write: if isAdmin(); }
+    match /testimonials/{doc}{ allow read: if true; allow write: if isAdmin(); }
+    match /settings/{doc}    { allow read: if true; allow write: if isAdmin(); }
+
+    // Analytics: anyone can write a pageview/event, only admin reads.
+    match /analytics/{doc}   { allow create: if true; allow read, update, delete: if isAdmin(); }
+  }
+}
